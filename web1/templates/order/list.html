@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h3>주문목록</h3>
+<table border="1">
+    <tr>
+        <th>주문번호</th><th>주문상품번호</th><th>주문상품명</th><th>주문수량</th><th>결제금액</th>
+        <th>결제유무</th><th>결제</th><th>주문취소</th>
+    </tr>
+    {% for o in olist %}
+    <tr>
+        <td>{{o.getNum()}}</td>
+        <td>{{o.getProd().getNum()}}</td>
+        <td>{{o.getProd().getName()}}</td>
+        <td>{{o.getAmount()}}</td>
+        <td>{{o.getTotal_pay()}}</td>
+        <td>{{o.isPay()}}</td>
+        <td>
+            {% if o.isPay() == 'false' %}
+            <a href="/order/pay/{{o.getNum()}}">결제</a>
+            {% endif %}
+        </td>
+        <td>
+            {% if o.isPay() == 'false' %}
+            <a href="/order/del/{{o.getNum()}}">주문취소</a>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+</body>
+</html>

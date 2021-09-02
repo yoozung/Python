@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        function a() {
+            result = f.price.value * f.amount.value
+            d = document.getElementById('result')
+            d.innerHTML = result
+            f.total_pay.value = result
+        }
+    </script>
+</head>
+<body>
+<h3>{{p.getName()}} 구매 페이지</h3>
+<a href="/product/list">목록으로 되돌아가기</a></br>
+<form action="/order/add" method="post" name="f">
+    <input type="hidden" name="total_pay">
+    <input type="hidden" name="pnum" value="{{p.getNum()}}">
+    <input type="hidden" name="pname" value="{{p.getName()}}">
+<table border="1">
+
+    <tr><th>가격</th><td><input type="number" name="price" value="{{p.getPrice()}}" readonly></td></tr>
+    <tr><th>주문수량</th><td><input type="number" name="amount" onclick="a()"></td></tr>
+    <tr><th>결제금액</th><td id="result"></td></tr>
+    <tr><td colspan="2"><input type="submit" value="구매"></td></tr>
+</table>
+</form>
+</body>
+</html>

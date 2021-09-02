@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h3>제품목록</h3>
+<a href="/product/add">제품등록</a><br/>
+<table border="1">
+    <tr><th>num</th><th>name</th><th>price</th><th>amount</th><th>구매</th></tr>
+    {% for p in plist %}
+    <tr>
+        <td>{{p.getNum()}}</td>
+        <td><a href="/product/get?num={{p.getNum()}}">{{p.getName()}}</a></td>
+        <td>{{p.getPrice()}}</td>
+        <td>{{p.getAmount()}}</td>
+        <td><a href="/product/prod-detail/{{p.getNum()}}">구매</a></td>
+    </tr>
+    {% endfor %}
+</table>
+</body>
+</html>
