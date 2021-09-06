@@ -86,6 +86,6 @@ test>flask db upgrade
 
 
 ## **11일차 (210906)**<br>
-- ORM <br/>
+- ORM 회원과 게시판<br/>
 - on delete cascade: 어떤 tuple이 삭제될 때 foreign key로 연결된 tuple 또한 같이 삭제되는 것
 - relationship 함수는 역참조
