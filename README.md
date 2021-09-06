@@ -37,6 +37,8 @@
   int는 읽는 타입이고 뒤에 변수는 url에 등록된 함수 파라메터 변수를 나타낸다.
 
 ## **10일차 (210903)**<br>
+- ORM <br/>
+
 파이참 프로젝트
 1. 터미널에서 플라스크 설치
 pip install flask
@@ -45,12 +47,12 @@ pip install flask
 /myapp1/templates
 4. 메인 역할의 파일 app.py생성. 이 파일의 이름은 자유
   다음 내용이 있어야 함.
-  1) 플라스크 객체 생성 코드
-  app = Flask(__name__)
-  2) 블루프린트가 있다면 등록
-  app.register_blueprint(등록할 블루프린트 객체)
-  3) Flask 실행하는 코드
-  app.run()
+    1) 플라스크 객체 생성 코드
+    app = Flask(__name__)
+    2) 블루프린트가 있다면 등록
+    app.register_blueprint(등록할 블루프린트 객체)
+    3) Flask 실행하는 코드
+    app.run()
 5. 라우트 파일 생성, 작성
 라우트 파일은 스프링의 컨트롤러와 비슷
 요청 url을 등록하고 해당 url로 요청이 왔을 때 처리 코드 작성
@@ -67,7 +69,23 @@ sessoin에서는 아이디로 클라이언트를 구분하고 유효성을 체�
 
 **Flask ORM**
 1. orm 설치
+pip install Flask-Migrate
+
+2. config 파일 작성
+
+3. model 작성: vo를 작성한다
+
+4. db 초기화
+test>flask db init
+
+5. 앱에 db연동
+test>flask db migrate
+
+6. db 변경사항 커밋
+test>flask db upgrade
 
 
-
-..디렉토리 이름을 test로 하고 임포트하면 라우트가 테스트하는파일인 줄 알고 인식 못한다
+## **11일차 (210906)**<br>
+- ORM 회원과 게시판<br/>
+- on delete cascade: 어떤 tuple이 삭제될 때 foreign key로 연결된 tuple 또한 같이 삭제되는 것
+- relationship 함수는 역참조
