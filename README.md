@@ -37,6 +37,8 @@
   int는 읽는 타입이고 뒤에 변수는 url에 등록된 함수 파라메터 변수를 나타낸다.
 
 ## **10일차 (210903)**<br>
+- ORM <br/>
+
 파이참 프로젝트
 1. 터미널에서 플라스크 설치
 pip install flask
@@ -84,6 +86,6 @@ test>flask db upgrade
 
 
 ## **11일차 (210906)**<br>
-
+- ORM <br/>
 - on delete cascade: 어떤 tuple이 삭제될 때 foreign key로 연결된 tuple 또한 같이 삭제되는 것
 - relationship 함수는 역참조
