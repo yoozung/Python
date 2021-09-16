@@ -1,0 +1,22 @@
+1. 노선 정보 확인
+ 1) api 키 받는다. 복사해둔다
+BYgs6%2FjSL0du1z8yK4GxYdW1SepukkJ0gXtUP3tGUQpjThEU4JeQKRlspdSnxTWcjia6U6r5oPxW%2F7tK7HZ2sg%3D%3D
+
+2)노선ID로 버스 정보를 획득
+url = 'http://ws.bus.go.kr/api/rest/busRouteInfo/getRouteInfo?ServiceKey=BYgs6%2FjSL0du1z8yK4GxYdW1SepukkJ0gXtUP3tGUQpjThEU4JeQKRlspdSnxTWcjia6U6r5oPxW%2F7tK7HZ2sg%3D%3D
+&busRouteId=버스노선ID'
+
+import requests
+html = requests.get(url).text 
+#root = BeautifulSoup(html, 'html.parser')
+root = BeautifulSoup(html, 'lxml-xml')
+
+code = root.find('headerCd').get_text()#결과코드
+if code=='0':
+   종점 = root.find('edStationNm').get_text()
+  기점 = root.find('stStationNm').get_text()
+  찻차시간= root.find('firstBusTm').get_text()
+...
+else:
+   print('오류발생')
+
