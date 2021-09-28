@@ -72,10 +72,10 @@ var adr = document.getElementsByClassName('adr'); // 지도를 표시할 div
 var shopName = document.getElementsByClassName('shopName'); // 지도를 표시할 가게명
 
 {% for r in rank %}
-for (var i=0; i < 2; i++) {
+for (var i=0; i < adr.length; i++) {
     // 주소로 좌표를 검색합니다
     console.log(shopName[i].value)
-    geocoder.addressSearch('{{r.dtlAddrNm}}', function(result, status) {
+    geocoder.addressSearch(adr[i].value, function(result, status) {
 
         // 정상적으로 검색이 완료됐으면
          if (status === kakao.maps.services.Status.OK) {
