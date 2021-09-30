@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>nationWideDetail</title>
+
+</head>
+<body>
+
+<div><a href="/">홈</a></div>
+<div style="display:block; font-size:80px; margin-left:auto; margin-right:auto; text-align:center; text-color:#36304a;">전국맛집랭킹</div>
+
+
+<table style="margin-top:100px; margin-right:auto; margin-left:auto; text-align:center">
+     <tbody>
+        <tr>
+            <td><img style="border:1px solid #36304a; width:400px; height:375px;" src="{{b.imgLink}}" /></td>
+            <td><div id="map" style="border:1px solid #36304a; width:400px; height:375px;"></div></td>
+        </tr>
+        <tr style="margin-top:10px; padding:10px; height:50px; font-size:15px;">
+            <td colspan="2">랭킹 {{b.rk}} 위</td>
+        </tr>
+
+        <tr style="margin-top:10px; padding:10px; height:50px; font-size:20px;">
+            <td colspan="2">{{b.itsBroNm}}</td>
+        </tr>
+
+        <tr style="margin-top:10px; padding:10px; height:50px; font-size:15px;">
+            <td colspan="2">{{b.dtlAddrNm}}</td>
+        </tr>
+
+
+
+    </tbody>
+
+</table>
+
+
+
+<h3 style="text-align:center;">댓글 리뷰</h3>
+<!--<a href="/board/add/form/{{num}}">글작성</a><br/>-->
+
+<!--method="POST" enctype="multipart/form-data"-->
+<!--<form action="/board/add/form/{{num}}/{{b.itsBroNm}}" method="GET">-->
+<!--    <input type="hidden" name="{{b.itsBroNm}}" value="{{b.itsBroNm}}">-->
+<!--    <input type="submit" value="작성">-->
+<!--</form>-->
+
+
+<table style="margin-right:auto; margin-left:auto;">
+    <tr style="border:1px solid black;"><th>내용</th><th>작성자</th><th>작성일</th></tr>
+    {% for w in c %}
+        <tr>
+<!--            <td><a href="/board/detail/{{b.num}}">{{w.num}}</a></td>-->
+            <td style="width:500px;">{{w.content}}</td>
+            <td>{{w.writer}}</td>
+            <td>{{w.w_date}}</td>
+        </tr>
+    {% endfor %}
+</table>
+
+
+<form action="/board/add/{{num}}" method="POST" enctype="multipart/form-data">
+    <table style="border:2px solid black; margin-right:auto; margin-left:auto;" >
+        <tr>
+            <th>내용</th><td><textarea name="content" placeholder="리뷰 작성칸" rows="1" cols="60"></textarea></td>
+            <th>작성자</th>
+            <td><input type="text" name="writer"></td>
+            <td><input type="hidden" name="itsBroNm" value="{{b.itsBroNm}}"> </td>
+            <td><input type="submit" value="작성"></td>
+        </tr>
+
+    </table>
+</form>
+
+
+
+
+<div><a href="/nationWide/nationWide_info">뒤로가기</a></div>
+
+
+
+
+
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8cc54ee7ce95116e097e9eae4d3b963f&libraries=services"></script>
+    <script>
+
+
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+            mapOption = {
+                center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+                level: 3 // 지도의 확대 레벨
+            };
+
+        // 지도를 생성합니다
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+
+        // 주소-좌표 변환 객체를 생성합니다
+        var geocoder = new kakao.maps.services.Geocoder();
+
+        // 주소로 좌표를 검색합니다
+        geocoder.addressSearch('{{b.dtlAddrNm}}', function(result, status) {
+
+            // 정상적으로 검색이 완료됐으면
+             if (status === kakao.maps.services.Status.OK) {
+
+                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                // 결과값으로 받은 위치를 마커로 표시합니다
+                var marker = new kakao.maps.Marker({
+                    map: map,
+                    position: coords
+                });
+
+                // 인포윈도우로 장소에 대한 설명을 표시합니다
+                var infowindow = new kakao.maps.InfoWindow({
+                    content: '<div style="width:150px;text-align:center;padding:6px 0;">랭킹 : {{b.rk}} / {{b.itsBroNm}} </div>'
+                });
+                infowindow.open(map, marker);
+
+                // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+                map.setCenter(coords);
+            }
+        });
+
+
+    </script>
+
+
+
+
+</body>
+</html>

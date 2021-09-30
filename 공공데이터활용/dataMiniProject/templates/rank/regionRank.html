@@ -3,133 +3,260 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <style>
-      table {
-        width: 100%;
-        border-top: 1px solid #444444;
-        border-collapse: collapse;
-        text-align: center;
-      }
 
-      th, td {
-        border-bottom: 1px solid #444444;
-        border-left: 1px solid #444444;
-        padding: 10px;
-      }
+<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="../static/images/icons/favicon.ico"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/vendor/animate/animate.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/vendor/select2/select2.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/vendor/perfect-scrollbar/perfect-scrollbar.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="../static/css/util.css">
+	<link rel="stylesheet" type="text/css" href="../static/css/main.css">
+<!--===============================================================================================-->
 
-      th:first-child, td:first-child {
-        border-left: none;
-      }
-
-      .container{
-      width: 60%;
-      margin: auto;
-      }
-
-      table tr:hover{
-		background-color: #E2E2E2;
-	}
-
-    </style>
 </head>
 <body>
 
-<div class="container">
+<div><a href="/">홈</a></div>
+
+<form action="/rank/regionRank" method="post">
+    <select name="y" class="custom-select">
+        <option value="강원도">강원도</option>
+        <option value="경기도" selected="selected">경기도</option>
+        <option value="경상북도">경상북도</option>
+        <option value="경상남도">경상남도</option>
+        <option value="대전광역시">대전광역시</option>
+        <option value="부산광역시">부산광역시</option>
+        <option value="서울특별시">서울특별시</option>
+        <option value="인천광역시">인천광역시</option>
+        <option value="전라북도">전라북도</option>
+        <option value="제주특별자치도">제주특별자치도</option>
+        <option value="전라남도">전라남도</option>
+        <option value="충청남도">충청남도</option>
+    </select>
+<input type="submit" value="검색">
+</form>
+
+
+<div style="display:block; font-size:80px; margin-left:auto; margin-right:auto; text-align:center; text-color:#36304a;">{{y}} 맛집랭킹</div>
+
+<table class="mainTable" style="margin-left:auto; margin-right:auto;">
+    <tr>
+        <td>
     <div id="map" style="width:500px;height:400px;"></div>
-    <table border="1">
-        <tr><th>전국순위</th><th>지역명</th><th>가게명</th><th>주소</th></tr>
-        {% for r in rank %}
-        <tr>
-            <td>{{r.rk}}</td>
-            <td>{{r.areaNm}}</td>
-            <td>{{r.itsBroNm}}</td>
-            <td>{{r.dtlAddrNm}}</td>
+        </td>
+        <td>
+    <table class="subTable">
+        <thead>
+            <tr class="table100-head">
+                <th>전국순위</th><th>사진</th><th>지역명</th><th>가게명</th><th>주소</th>
+            </tr>
+        </thead>
+        {% for r in rank.items %}
+        <tr onclick="location.href='/nationWide/detail/{{r.rk}}'">
+            <td class="column1">{{r.rk}}</td>
+            <td class="column2"><img style="width:100px; height:100px;" class="img-concert" src="{{r.imgLink}}" /></td>
+            <td class="column3">{{r.areaNm}}</td>
+            <td class="column4" style="width:200px;">{{r.itsBroNm}}</td>
+            <td class="column5" style="width:400px;">{{r.dtlAddrNm}}</td>
         </tr>
         <input type="hidden" value="{{r.dtlAddrNm}}" class="adr">
         <input type="hidden" value="{{r.itsBroNm}}" class="shopName">
         {% endfor %}
-    </table>
+            </td>
+        </table>
+    </tr>
+</table>
 
+    <div style="display:block; margin-right:auto; margin-left:auto;">
+
+<!--===============================================================================================-->
+	<script src="../static/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="../static/vendor/bootstrap/js/popper.js"></script>
+	<script src="../static/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="../static/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+	<script src="../static/js/main.js"></script>
+
+
+
+	<!-- 페이징처리 시작 -->
+    <ul class="pagination justify-content-center">
+
+        <!-- 이전페이지 -->
+        {% if rank.has_prev %}
+        <li class="page-item">
+<!--            <a class="page-link" href="?page={{ rank.prev_num }}">이전</a>-->
+
+            <form action="?page={{ rank.prev_num }}" method="POST">
+                <input type="hidden" name="y" value="{{y}}">
+                <input type="submit" value="이전">
+            </form>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+        </li>
+        {% endif %}
+
+        <!-- 페이지 리스트를 돌면서 해당 페이지로 이동할 수 있는 링크 -->
+        {% for page_num in rank.iter_pages() %}
+            {% if page_num %}
+                {% if page_num != rank.page %}
+                <li class="page-item">
+                    <form action="?page={{ page_num }}" method="POST">
+                        <input type="hidden" name="y" value="{{y}}">
+                        <input type="submit" value="{{ page_num }}">
+                    </form>
+
+<!--                    <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>-->
+
+                </li>
+                {% else %}
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link" href="#">{{ page_num }}</a>
+                </li>
+                {% endif %}
+           {% else %}
+                <li class="disabled">
+                    <a class="page-link" href="#">...</a>
+                </li>
+           {% endif %}
+        {% endfor %}
+
+
+        <!-- 다음페이지 -->
+        {% if rank.has_next %}
+        <li class="page-item">
+<!--            <a class="page-link" href="?page={{ rank.next_num }}">다음</a>-->
+
+            <form action="?page={{ rank.next_num }}" method="POST">
+                        <input type="hidden" name="y" value="{{y}}">
+                        <input type="submit" value="다음">
+            </form>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+        </li>
+        {% endif %}
+    </ul>
+    <!-- 페이징처리 끝 -->
 </div>
+
+
+
+<!--===============================================================================================-->
+	<script src="../static/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="../static/vendor/bootstrap/js/popper.js"></script>
+	<script src="../static/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="../static/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+	<script src="../static/js/main.js"></script>
 </body>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a4311adb6e1c8e2e4bdef6d9d507e8a5&libraries=services"></script>
-<script>
-var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-    mapOption = {
-        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-        level: 3 // 지도의 확대 레벨
-    };
 
-// 지도를 생성합니다
-var map = new kakao.maps.Map(mapContainer, mapOption);
+ <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8cc54ee7ce95116e097e9eae4d3b963f&libraries=services"></script>
+        <script>
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+            mapOption = {
+                center : new kakao.maps.LatLng(36.2683, 127.6358), // 지도의 중심좌표
+                level : 14 // 지도의 확대 레벨
+            };
 
-// 주소-좌표 변환 객체를 생성합니다
-var geocoder = new kakao.maps.services.Geocoder();
+        // 지도를 생성합니다
+        var map = new kakao.maps.Map(mapContainer, mapOption);
 
-// api에서 주소 가져오기
-var adr = document.getElementsByClassName('adr'); // 지도를 표시할 div
-
-var shopName = document.getElementsByClassName('shopName'); // 지도를 표시할 가게명
-
-{% for r in rank %}
-for (var i=0; i < 2; i++) {
-    // 주소로 좌표를 검색합니다
-    console.log(shopName[i].value)
-    geocoder.addressSearch('{{r.dtlAddrNm}}', function(result, status) {
-
-        // 정상적으로 검색이 완료됐으면
-         if (status === kakao.maps.services.Status.OK) {
-
-            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-            // 결과값으로 받은 위치를 마커로 표시합니다
-            var marker = new kakao.maps.Marker({
-                map: map,
-                position: coords
-            });
-
-            // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-            map.setCenter(coords);
+        // 주소-좌표 변환 객체를 생성합니다
+        var geocoder = new kakao.maps.services.Geocoder();
 
 
+        // 주소 변수에 저장
 
-        var iwContent = '<div style="padding:5px;">{{r.rk}}위  {{r.itsBroNm}}</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-        iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+        var addressList = []
 
-        // 인포윈도우를 생성합니다
-        var infowindow = new kakao.maps.InfoWindow({
-                content : iwContent,
-            });
+        // 주소로 좌표를 검색합니다
+        {% for s in rank.items %}
+        for (var i = 0; i < 1; i ++) {
+            geocoder.addressSearch('{{s.dtlAddrNm}}', function(result, status) {
+                console.log(i);
+                // 정상적으로 검색이 완료됐으면
+                 if (status === kakao.maps.services.Status.OK) {
+
+                    var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                    addressList.push(coords);
+
+                    // 마커 이미지
+                    var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+
+                    // 마커 이미지의 이미지 크기 입니다
+                    var imageSize = new kakao.maps.Size(24, 35);
+
+                    // 마커 이미지를 생성합니다
+                    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
+                    var marker = new kakao.maps.Marker({
+                        map: map, // 마커를 표시할 지도
+                        title : '지도', // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+                        position: coords, // 마커를 표시할 위치
+                        image : markerImage // 마커 이미지
+                    });
 
 
-        // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
-        // 이벤트 리스너로는 클로저를 만들어 등록합니다
-        // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
-        kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
-        kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
 
-        // 인포윈도우를 표시하는 클로저를 만드는 함수입니다
-        function makeOverListener(map, marker, infowindow) {
-        return function() {
-            infowindow.open(map, marker);
-                };
-            }
+                    var iwContent = '<div style="padding:5px; ">랭킹:{{s.rk}} / {{s.itsBroNm}}</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+                    iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
 
-        // 인포윈도우를 닫는 클로저를 만드는 함수입니다
-        function makeOutListener(infowindow) {
-                return function() {
-                infowindow.close();
-                };
-            }
+                    // 인포윈도우를 생성합니다
+                    var infowindow = new kakao.maps.InfoWindow({
+                        content : iwContent,
+                    });
 
-        kakao.maps.event.addListener(marker, 'click', function() {
-             // 클릭 이벤트 발동시 해당 링크로 이동합니다.
-            location.href='/';
-            });
-         }
-    }
-)};
-{% endfor %}
 
-</script>
+                    // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
+                    // 이벤트 리스너로는 클로저를 만들어 등록합니다
+                    // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
+                    kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
+                    kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+
+                    // 인포윈도우를 표시하는 클로저를 만드는 함수입니다
+                    function makeOverListener(map, marker, infowindow) {
+                        return function() {
+                            infowindow.open(map, marker);
+                        };
+                    }
+
+                    // 인포윈도우를 닫는 클로저를 만드는 함수입니다
+                    function makeOutListener(infowindow) {
+                        return function() {
+                            infowindow.close();
+                        };
+                    }
+
+                    kakao.maps.event.addListener(marker, 'click', function() {
+                          // 클릭 이벤트 발동시 해당 링크로 이동합니다.
+                          location.href='/nationWide/detail/{{s.rk}}';
+                    });
+
+
+                }
+            })
+        };
+        {% endfor %}
+
+        console.log(addressList);
+
+
+        </script>
 </html>

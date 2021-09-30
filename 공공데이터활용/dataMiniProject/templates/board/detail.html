@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        function edit(){
+            location.href='/board/edit/{{b.num}}'
+        }
+        function delete(){
+            location.href='/board/del/{{b.num}}'
+        }
+    </script>
+</head>
+<body>
+<h3>{{b.writer}}의 리뷰</h3>
+<table border="1">
+    <tr><th>내용</th><td>{{b.content}}</td></tr>
+    <tr><th>작성자</th><td>{{b.writer}}</td></tr>
+    <tr><th>작성일</th><td>{{b.w_date}}</td></tr>
+</table>
+<input type="button" value="수정" onclick="edit()">
+<input type="button" value="삭제" onclick="delete()"><br/>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+<h3>리뷰 게시판</h3>
+<a href="/board/add">글작성</a><br/>
+<table border="1">
+    <tr><th>번호</th><th>내용</th><th>작성자</th><th>작성일</th></tr>
+    {% for b in blist %}
+        <tr>
+            <td><a href="/board/detail/{{b.num}}">{{b.num}}</a></td>
+            <td>{{b.content}}</td>
+            <td>{{b.writer}}</td>
+            <td>{{b.w_date}}</td>
+        </tr>
+    {% endfor %}
+</table>
+</body>
+</html>
